@@ -1,0 +1,79 @@
+version: "3.9"
+networks:
+  cassandra:
+services:
+  cass1:
+    build:
+      context: build
+    entrypoint: ["/entry-docker.sh"]
+    container_name: cass1
+    hostname: cass1
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./start-cassandra.sh:/start-cassandra.sh
+      - ./entry-docker.sh:/entry-docker.sh
+      - ./data_before.sh:/data_before.sh
+      - ./data_after.sh:/data_after.sh
+      - ./update_sed.sh:/update_sed.sh
+    environment: &environment
+        CASSANDRA_SEEDS: "cass1,cass2,cass3"
+        CASSANDRA_CLUSTER_NAME: SolarSystem
+        CASSANDRA_DC: Mars
+        CASSANDRA_RACK: West
+        CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+        CASSANDRA_NUM_TOKENS: 128
+        CASSANDRA_CONFIG: /etc/cassandra/
+
+  cass2:
+    build:
+      context: build
+    entrypoint: ["/entry-docker.sh"]
+    container_name: cass2
+    hostname: cass2
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9043:9042"
+    volumes:
+      - ./start-cassandra.sh:/start-cassandra.sh
+      - ./entry-docker.sh:/entry-docker.sh
+      - ./data_before.sh:/data_before.sh
+      - ./data_after.sh:/data_after.sh
+      - ./update_sed.sh:/update_sed.sh
+    environment: *environment
+
+  cass3:
+    build:
+      context: build
+    entrypoint: ["/entry-docker.sh"]
+    container_name: cass3
+    hostname: cass3
+    healthcheck:
+        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+        interval: 5s
+        timeout: 5s
+        retries: 60
+    networks:
+      - cassandra
+    ports:
+      - "9044:9042"
+    volumes:
+      - ./start-cassandra.sh:/start-cassandra.sh
+      - ./entry-docker.sh:/entry-docker.sh
+      - ./data_before.sh:/data_before.sh
+      - ./data_after.sh:/data_after.sh
+      - ./update_sed.sh:/update_sed.sh
+    environment: *environment
