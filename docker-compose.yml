@@ -4,7 +4,7 @@ networks:
 services:
   cass1:
     build:
-      context: build
+      context: .
     entrypoint: ["/entry-docker.sh"]
     container_name: cass1
     hostname: cass1
@@ -34,7 +34,7 @@ services:
 
   cass2:
     build:
-      context: build
+      context: .
     entrypoint: ["/entry-docker.sh"]
     container_name: cass2
     hostname: cass2
@@ -57,7 +57,7 @@ services:
 
   cass3:
     build:
-      context: build
+      context: .
     entrypoint: ["/entry-docker.sh"]
     container_name: cass3
     hostname: cass3
